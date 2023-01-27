@@ -7,6 +7,16 @@ export default function Register() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    const response = await fetch("http://localhost:4001/register", {
+      method: "POST",
+      body: JSON.stringify({ username, password }),
+      headers: { "Content-Type": "application/json" },
+    });
+    if (response.status === 200) {
+      alert("registration successful");
+    } else {
+      alert("registration failed");
+    }
   };
 
   return (
