@@ -7,7 +7,7 @@ import Register from "./pages/register";
 import CreatePost from "./pages/CreatePost";
 import Post from "./pages/Post";
 import EditPost from "./pages/EditPost";
-import UserContextProvider  from "./context/UserContext";
+import {UserContextProvider}  from "./context/UserContext";
 
 function App() {
   return (
