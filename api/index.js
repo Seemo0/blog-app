@@ -65,4 +65,12 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json("Bye");
 });
 
+app.get("/profile", (req, res) => {
+  const { token } = req.cookies;
+  jwt.verify(token, jwtSecret, {}, (err, info) => {
+    if (err) throw err;
+    res.json(info);
+  });
+});
+
 app.listen(4001, () => console.log("App listening on PORT 4001"));
