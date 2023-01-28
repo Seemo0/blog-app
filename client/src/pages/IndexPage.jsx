@@ -4,7 +4,9 @@ import Posts from '../components/Posts'
 export default function IndexPage() {
   return (
     <>
-     <Posts />
+      <Posts />
+      <Posts />
+      <Posts />
     </>
-  )
+  );
 }

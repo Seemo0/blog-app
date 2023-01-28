@@ -8,7 +8,7 @@ export default function Posts({ _id, title, summary, cover, content, createdAt, 
         <Link to={`/post/${_id}`}>
           <img
             src={
-              ""
+              "https://cdn.motor1.com/images/mgl/mrz1e/s3/coolest-cars-feature.jpg"
             }
             alt="semo"
           />
