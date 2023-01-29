@@ -11,6 +11,7 @@ import cookieParser from "cookie-parser";
 import fs from "fs";
 const uploadMiddleware = multer({ dest: "uploads/" });
 import User from "./models/User.js";
+import Post from "./models/Post.js";
 
 dotenv.config();
 const app = express();
@@ -71,6 +72,43 @@ app.get("/profile", (req, res) => {
     if (err) throw err;
     res.json(info);
   });
+});
+
+app.post("/post", uploadMiddleware.single("file"), async (req, res) => {
+  const { originalname, path } = req.file;
+  const parts = originalname.split(".");
+  const ext = parts[parts.length - 1];
+  const newPath = path + "." + ext;
+  fs.renameSync(path, newPath);
+
+  const { token } = req.cookies;
+  jwt.verify(token, jwtSecret, {}, async (err, info) => {
+    if (err) throw err;
+    const { title, summary, content } = req.body;
+    const postDoc = await Post.create({
+      title,
+      summary,
+      content,
+      cover: newPath,
+      author: info.id,
+    });
+    res.json(postDoc);
+  });
+});
+
+app.get("/post", async (req, res) => {
+  res.json(
+    await Post.find()
+      .populate("author", ["username"])
+      .sort({ createdAt: -1 })
+      .limit(20)
+  );
+});
+
+app.get("/post/:id", async (req, res) => {
+  const { id } = req.params;
+  const postDoc = await Post.findById(id).populate("author", ["username"]);
+  res.json(postDoc);
 });
 
 app.listen(4001, () => console.log("App listening on PORT 4001"));
