@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
@@ -18,7 +18,6 @@ const modules = {
   ],
 };
 
-
 export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
@@ -26,14 +25,30 @@ export default function CreatePost() {
   const [files, setFiles] = useState("");
   const [redirect, setRedirect] = useState(false);
 
+  const createNewPost = async (e) => {
+    const data = new FormData()
+     data.set("title", title);
+     data.set("summary", summary);
+     data.set("content", content);
+     data.set("file", files[0]);
+    e.preventDefault()
+    console.log(files)
+    const response = await fetch('http://localhost:4001/post', {
+      method: 'POST',
+      body: data,
+      credentials: 'include',
+    });
+    if (response.ok) {
+      setRedirect(true);
+    }
+  };
 
-
-  // if (redirect) {
-  //   return <Navigate to={"/"} />;
-  // }
+  if (redirect) {
+    return <Navigate to={"/"} />;
+  }
 
   return (
-    <form>
+    <form onSubmit={createNewPost}>
       <input
         type="title"
         placeholder={"Title"}
