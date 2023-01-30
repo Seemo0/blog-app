@@ -1,24 +1,10 @@
 import React, { useState } from "react";
 import { Navigate } from "react-router-dom";
-import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, false] }],
-    ["bold", "italic", "underline", "strike", "blockquote"],
-    [
-      { list: "ordered" },
-      { list: "bullet" },
-      { indent: "-1" },
-      { indent: "+1" },
-    ],
-    ["link", "image"],
-    ["clean"],
-  ],
-};
+import Editor from "../components/Editor";
 
 export default function CreatePost() {
+
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [content, setContent] = useState("");
@@ -26,17 +12,16 @@ export default function CreatePost() {
   const [redirect, setRedirect] = useState(false);
 
   const createNewPost = async (e) => {
-    const data = new FormData()
-     data.set("title", title);
-     data.set("summary", summary);
-     data.set("content", content);
-     data.set("file", files[0]);
-    e.preventDefault()
-    console.log(files)
-    const response = await fetch('http://localhost:4001/post', {
-      method: 'POST',
+    const data = new FormData();
+    data.set("title", title);
+    data.set("summary", summary);
+    data.set("content", content);
+    data.set("file", files[0]);
+    e.preventDefault();
+    const response = await fetch("http://localhost:4001/post", {
+      method: "POST",
       body: data,
-      credentials: 'include',
+      credentials: "include",
     });
     if (response.ok) {
       setRedirect(true);
@@ -62,12 +47,7 @@ export default function CreatePost() {
         onChange={(ev) => setSummary(ev.target.value)}
       />
       <input type="file" onChange={(ev) => setFiles(ev.target.files)} />
-      {/* <Editor value={content} onChange={setContent} /> */}
-      <ReactQuill
-        value={content}
-        onChange={(newValue) => setContent(newValue)}
-        modules={modules}
-      />
+      <Editor value={content} onChange={setContent} />
       <button style={{ marginTop: "5px" }}>Create post</button>
     </form>
   );
